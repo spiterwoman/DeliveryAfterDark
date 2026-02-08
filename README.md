@@ -8,6 +8,6 @@
 ## First-time setup
 ```bash
 git lfs install
-git clone <REPO_URL>
+git clone https://github.com/spiterwoman/DeliveryAfterDark.git
 cd DeliveryAfterDark
 git lfs pull
