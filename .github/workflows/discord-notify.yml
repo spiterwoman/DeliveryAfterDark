@@ -1,0 +1,31 @@
+name: Discord notifications
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Discord notification
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+          EVENT_NAME: ${{ github.event_name }}
+          REPO: ${{ github.repository }}
+          ACTOR: ${{ github.actor }}
+          REF: ${{ github.ref_name }}
+          COMMIT_MSG: ${{ github.event.head_commit.message }}
+          COMMIT_URL: ${{ github.event.head_commit.url }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          if [ "$EVENT_NAME" = "push" ]; then
+            CONTENT="**Push** to \`$REPO\` on **$REF** by **$ACTOR**\n${COMMIT_MSG}\n${COMMIT_URL}"
+          else
+            CONTENT="**PR ${{ github.event.action }}** in \`$REPO\` by **$ACTOR**\n${PR_TITLE}\n${PR_URL}"
+          fi
+
+          curl -H "Content-Type: application/json" \
+               -d "{\"content\":\"$CONTENT\"}" \
+               "$DISCORD_WEBHOOK"

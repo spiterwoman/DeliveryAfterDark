@@ -11,3 +11,5 @@ git lfs install
 git clone https://github.com/spiterwoman/DeliveryAfterDark.git
 cd DeliveryAfterDark
 git lfs pull
+
+test webhook
