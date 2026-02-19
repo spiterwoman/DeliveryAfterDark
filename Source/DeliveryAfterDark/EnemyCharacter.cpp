@@ -2,6 +2,12 @@
 
 
 #include "EnemyCharacter.h"
+#include "EnemyAIController.h"
+
+AEnemyCharacter::AEnemyAIController() {
+	AIControllerClass = AEnemyAIController::StaticClass();
+	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
+}
 
 // Sets default values
 AEnemyCharacter::AEnemyCharacter()
