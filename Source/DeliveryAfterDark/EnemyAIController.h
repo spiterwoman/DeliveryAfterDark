@@ -4,8 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "AIController.h"
-#include "EnemyAIController.generated.h"
 #include "Perception/AIPerceptionTypes.h"
+#include "EnemyAIController.generated.h"
 
 class UAIPerceptionComponent;
 class UAISenseConfig_Sight;
@@ -25,7 +25,7 @@ protected:
 	virtual void OnPossess(APawn* InPawn) override;
 
 private:
-	UPROPERTY();
+	UPROPERTY()
 	UAIPerceptionComponent* PerceptionComp;
 
 	UPROPERTY()

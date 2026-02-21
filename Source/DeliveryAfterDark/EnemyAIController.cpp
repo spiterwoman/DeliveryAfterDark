@@ -1,10 +1,12 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "EnemyAIController.h"
+
 #include "Perception/AIPerceptionComponent.h"
 #include "Perception/AISenseConfig_Sight.h"
 #include "Perception/AISense_Sight.h"
+
+
 
 AEnemyAIController::AEnemyAIController()
 {
@@ -41,7 +43,7 @@ void AEnemyAIController::OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus St
 	if (!Actor)
 		return;
 
-	if (Stimulus.wasSuccessfullySensed())
+	if (Stimulus.WasSuccessfullySensed())
 	{
 		// Sees target -> chase
 
@@ -50,6 +52,6 @@ void AEnemyAIController::OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus St
 	else
 	{
 		// Lost target -> stop chasing
-		StopMoveMent();
+		StopMovement();
 	}
 }
