@@ -25,5 +25,6 @@ public:
     bool IsMaxHeat() const;
 
 private:
+    UPROPERTY();
     int32 CurrentHeat;
 };
