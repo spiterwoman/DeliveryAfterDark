@@ -16,6 +16,9 @@ public:
     UFUNCTION(BlueprintCallable, Category = "Inventory")
     bool DeliverPackage();
 
+    UFUNCTION(BlueprintCallable, Category = "Inventory")
+	bool PickupPackage();
+
     // Simple getter for the UI to ask "How many left?"
     UFUNCTION(BlueprintPure, Category = "Inventory")
     int32 GetPackageCount() const;
