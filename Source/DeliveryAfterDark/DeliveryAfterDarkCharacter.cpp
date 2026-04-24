@@ -11,12 +11,13 @@
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
 #include "DeliveryAfterDark.h"
+#include "TimerManager.h"
 
 ADeliveryAfterDarkCharacter::ADeliveryAfterDarkCharacter()
 {
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
-		
+
 	// Don't rotate when the controller rotates. Let that just affect the camera.
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
@@ -53,11 +54,11 @@ ADeliveryAfterDarkCharacter::ADeliveryAfterDarkCharacter()
 void ADeliveryAfterDarkCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	// Set up action bindings
-	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
-		
+	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent))
+	{
 		// Jumping
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacter::Jump);
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
+		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ADeliveryAfterDarkCharacter::StartJumpInput);
+		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ADeliveryAfterDarkCharacter::EndJumpInput);
 
 		// Moving
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ADeliveryAfterDarkCharacter::Move);
@@ -122,12 +123,39 @@ void ADeliveryAfterDarkCharacter::DoLook(float Yaw, float Pitch)
 
 void ADeliveryAfterDarkCharacter::DoJumpStart()
 {
-	// signal the character to jump
-	Jump();
+	if (!GetCharacterMovement()->IsFalling())
+	{
+		JumpStarted = true;
+		GetWorldTimerManager().SetTimer(JumpDelayHandle, this, &ADeliveryAfterDarkCharacter::ExecuteDelayedJump, 0.06f, false);
+	}
 }
 
 void ADeliveryAfterDarkCharacter::DoJumpEnd()
 {
-	// signal the character to stop jumping
 	StopJumping();
+}
+
+void ADeliveryAfterDarkCharacter::StartJumpInput()
+{
+	if (!GetCharacterMovement()->IsFalling())
+	{
+		JumpStarted = true;
+		GetWorldTimerManager().SetTimer(JumpDelayHandle, this, &ADeliveryAfterDarkCharacter::ExecuteDelayedJump, 0.06f, false);
+	}
+}
+
+void ADeliveryAfterDarkCharacter::EndJumpInput()
+{
+	StopJumping();
+}
+
+void ADeliveryAfterDarkCharacter::Landed(const FHitResult& Hit)
+{
+	Super::Landed(Hit);
+	JumpStarted = false;
+}
+
+void ADeliveryAfterDarkCharacter::ExecuteDelayedJump()
+{
+	Jump();
 }
